@@ -5,7 +5,7 @@ var allBtns = $("button");
 var gamePattern = [];
 var userPattern = [];
 var index = 0;
-var score = 0;
+var score = 19;
 var difficult = 500;
 
 // Hide Image
@@ -19,17 +19,16 @@ for (let i=0; i < btnColors.length; i++) {
 // Listen to KeyPress
 
 function start() {
-    $(document).on("keypress",function(e) {
-        if (e.key == 's') {
-            $("body").css("background-color", "rgb(0, 28, 53)");
-            $(document).off("keypress");
-            $("h2").text("")
-            // Change h1 tag and Go to nextLevel
-            $("h1").text("Level " + (index + 1));
-            nextLevel()
-        }
+    $("h1").on("click",function(e) {
+        $("body").css("background-color", "rgb(0, 28, 53)");
+        $("h1").off("click");
+        $("h2").text("")
+        // Change h1 tag and Go to nextLevel
+        $("h1").text("Level " + (index + 1));
+        nextLevel()
     })
 }
+
 start()
 
 // Next Level Function
@@ -99,7 +98,7 @@ function enableClick() {
                     if (score == 20) {
                         youWon();
                     } else {
-                        setTimeout(nextLevel, 1000);
+                        setTimeout(nextLevel, 700);
                     }
                 }
             } else {
@@ -123,7 +122,7 @@ function gameOver() {
     score = 0;
 
     // Change Text and enable to Start again
-    $("h1").text("Gameover! Press the 's' key to restart.");
+    $("h1").text("Gameover! Click me to restart.");
     start();
 
     // Change body background
@@ -146,8 +145,25 @@ function youWon() {
     score = 0;
 
     // Change Text and enable to Start again
-    $("h1").text("🎉🎉Congratualations You Won!🎉🎉");
-    start();
+    // $("h1").text("🎉🎉Congratulations You Win!🎉🎉");
+    var splittedText = "🎉🎉Congratulations You Win!🎉🎉".split("");
+    console.log(splittedText)
+
+    function loopThroughSplittedText(splittedText) {
+        var word = ""
+        for (var i = 0; i < splittedText.length; i++) {
+            // for each iteration console.log a word
+            // and make a pause after it
+            (function (i) {
+                setTimeout(function () {
+                    word += splittedText[i];
+                    $('h1').text(word);
+                    console.log(splittedText[i]);
+                }, 300 * i);
+            })(i);
+        };
+    }
+    loopThroughSplittedText(splittedText);
 
     // Change body background
     
