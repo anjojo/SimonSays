@@ -5,7 +5,7 @@ var allBtns = $("button");
 var gamePattern = [];
 var userPattern = [];
 var index = 0;
-var score = 19;
+var score = 0;
 var difficult = 500;
 
 // Hide Image
