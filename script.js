@@ -6,7 +6,10 @@ var gamePattern = [];
 var userPattern = [];
 var index = 0;
 var score = 0;
+var difficult = 500;
 
+// Hide Image
+$("img").hide()
 
 // Add Colors to Buttons
 for (let i=0; i < btnColors.length; i++) {
@@ -18,9 +21,11 @@ for (let i=0; i < btnColors.length; i++) {
 function start() {
     $(document).on("keypress",function(e) {
         if (e.key == 's') {
-            $(document).off("keypress")
+            $("body").css("background-color", "rgb(0, 28, 53)");
+            $(document).off("keypress");
+            $("h2").text("")
             // Change h1 tag and Go to nextLevel
-            $("h1").text("Level " + (index + 1))
+            $("h1").text("Level " + (index + 1));
             nextLevel()
         }
     })
@@ -36,14 +41,19 @@ function nextLevel () {
     // Choose random color and Play audio
     // var ran
     var randomClr = allBtns[Math.floor(Math.random()*allBtns.length)];
-    // $(randomClr).hide().fadeIn("fast");
-
-    // let clrAudio = new Audio("sounds/" + btnSounds[$(randomClr).attr("name")]);
-    // clrAudio.play();
-
+   
     // Append color to list and enable click 
     gamePattern.push($(randomClr).attr("name"));
-  
+
+    if (score > 6) {
+        difficult = 300;
+    } else if (score > 10) {
+        difficult = 250;
+    } else if (score > 15) {
+        difficult = 200;
+    };
+    
+
     function loopThroughPattern(gamePattern) {
         for (var i = 0; i < gamePattern.length; i++) {
             // for each iteration console.log a word
@@ -53,7 +63,7 @@ function nextLevel () {
                     $("[name=" + gamePattern[i] +"]").hide().fadeIn("fast");
                     let clrAudio = new Audio("sounds/" + btnSounds[gamePattern[i]]);
                     clrAudio.play();
-                }, 500 * i);
+                }, difficult * i);
             })(i);
         };
         enableClick()  
@@ -86,7 +96,11 @@ function enableClick() {
                     $("h1").text("Level " + (index + 1));
                     $("button").off("click");
                     score++;
-                    setTimeout(nextLevel, 1000);
+                    if (score == 20) {
+                        youWon();
+                    } else {
+                        setTimeout(nextLevel, 1000);
+                    }
                 }
             } else {
                 gameOver()
@@ -122,3 +136,27 @@ function gameOver() {
     }, 100);
 }
 
+
+function youWon() {
+
+    // Restart Global Variables
+    userPattern.length = 0;
+    gamePattern.length = 0;
+    index = 0;
+    score = 0;
+
+    // Change Text and enable to Start again
+    $("h1").text("🎉🎉Congratualations You Won!🎉🎉");
+    start();
+
+    // Change body background
+    
+    $("body").css("background-color", "lightgreen");
+    $(".box-container").hide();
+    $("img").show();
+    let clrAudio = new Audio("sounds/win.mp3");
+    let scndAudio = new Audio("sounds/clap.mp3");
+    clrAudio.play();
+    scndAudio.play();
+
+}
